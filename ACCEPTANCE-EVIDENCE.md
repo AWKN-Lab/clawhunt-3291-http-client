@@ -233,4 +233,6 @@
 - AC4 补记提交：**run 45777705696，completed / success**，head `8b5cb04a`，
   https://github.com/AWKN-Lab/clawhunt-3291-http-client/actions/runs/45777705696。
   （本次 AC1/AC2 整改补记：上一轮该运行号只记录在回执里，未写进本文件。）
-- AC1/AC2 整改提交：待推送后补运行号与结果。
+- AC1/AC2 整改提交：**run 45779641226，completed / success**，head `c50d6c56`，
+  https://github.com/AWKN-Lab/clawhunt-3291-http-client/actions/runs/45779641226。
+  （CI 通过后，本文件补记运行号，MANIFEST 同步更新，见补记提交。）
