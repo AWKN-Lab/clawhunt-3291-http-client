@@ -39,7 +39,7 @@
   首次运行因 setup.sh 用 `node` 直接执行 `.bin/tsc`（shell 包装脚本）报 SyntaxError，
   已修为真实 JS 入口（`node_modules/typescript/bin/tsc`、`node_modules/vitest/vitest.mjs`），
   重跑存新日志，旧日志未改写。
-- CI：六次运行全部 success（见下「CI」一节），最新 run 45779727332，head `b83ab63d`。
+- CI：七次运行全部 success（见下「CI」一节），最新 run 45781299189，head `9d2d4d52`。
 
 ## 逐点证据
 
@@ -218,7 +218,7 @@
 4. 403/422/5xx 的提示 UI 与离线横幅 UI 由宿主应用实现，本样品只验证回调触发与状态订阅。
 5. gen:api 只验证了示例 schema；真实业务 OpenAPI 文档未接入。
 6. Alembic 迁移：本样品是纯前端请求层，无需迁移（无数据库表变更）。
-7. CI：六次运行全部 success，见下「CI」一节。
+7. CI：七次运行全部 success，见下「CI」一节。
 
 ## CI
 
@@ -236,3 +236,6 @@
   https://github.com/AWKN-Lab/clawhunt-3291-http-client/actions/runs/45779641226。
 - AC1/AC2 补记提交：**run 45779727332，completed / success**，head `b83ab63d`，
   https://github.com/AWKN-Lab/clawhunt-3291-http-client/actions/runs/45779727332。
+- CI 同步提交：**run 45781299189，completed / success**，head `9d2d4d52`，
+  https://github.com/AWKN-Lab/clawhunt-3291-http-client/actions/runs/45781299189。
+  （本提交仅改本文档与 MANIFEST，代码与测试未变；下次提交用 `[skip ci]`，不再为纯文档改动触发新运行，避免文档永远落后最新运行号一轮。）
