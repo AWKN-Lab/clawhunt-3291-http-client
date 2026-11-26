@@ -1,0 +1,3 @@
+✨ openapi-typescript 7.13.0
+🚀 /home/hatch/workspace/goals/20/hidden_files/skill-sync-20261125/3291-build/repo/examples/openapi.json → /tmp/gen-api-check-2HokmR/api.ts [62.7ms]
+gen:api check OK：重新生成的类型与 src/generated/api.ts 一致。

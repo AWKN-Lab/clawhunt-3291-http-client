@@ -1,0 +1,42 @@
+NODE=node (v24.22.1)
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +119
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 119, reused 15, downloaded 0, added 0
+Progress: resolved 119, reused 119, downloaded 0, added 108
+Progress: resolved 119, reused 119, downloaded 0, added 119, done
+
+dependencies:
++ @tanstack/react-query 5.108.4
++ react 19.3.1
++ react-dom 19.3.1
+
+devDependencies:
++ @testing-library/react 16.3.3
++ @types/node 24.10.1
++ @types/react 19.3.3
++ @types/react-dom 19.3.0
++ jsdom 31.0.1
++ openapi-typescript 7.13.0
++ typescript 5.9.3
++ vitest 5.1.2
+
+Done in 2.8s using pnpm v10.14.0
+安装：pnpm install 成功
+TEST_NODE=node (v24.22.1，可解析 vitest)
+/home/hatch/workspace/goals/20/hidden_files/skill-sync-20261125/3291-build/repo/node_modules/.bin/tsc:2
+basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+          ^^^^^^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (node:internal/modules/cjs/loader:1861:18)
+    at Module._compile (node:internal/modules/cjs/loader:1903:20)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)
+    at Module._load (node:internal/modules/cjs/loader:1443:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.22.1

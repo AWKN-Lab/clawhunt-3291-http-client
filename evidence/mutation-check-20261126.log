@@ -1,0 +1,207 @@
+config.ts SHA256（变异前）: 4af5f1d03a6400c9b98b31d3a93038d1147663d9d8fc91fed0c016f6f1b501db
+--- A 相：原配置 ---
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.2 [39m[90m/home/hatch/workspace/goals/20/hidden_files/skill-sync-20261125/3291-build/repo[39m
+
+ [32m✓[39m tests/handlers.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/config.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/errors.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 1362[2mms[22m[39m
+   [32m✓[39m request() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n [2m(6)[22m
+     [33m[2m✓[22m[39m GET 502、504 各重试；HTTP 500 不重试[33m 606[2mms[22m[39m
+     [33m[2m✓[22m[39m HTTP 503 配业务码 0 仍重试（业务码不参与重试决策）[33m 302[2mms[22m[39m
+ [32m✓[39m tests/gen-api.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m tests/network.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/query.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 212[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m53 passed[39m[22m[90m (53)[39m
+[2m   Start at [22m 05:12:51
+[2m   Duration [22m 4.83s[2m (environment 50%, tests 27%, import 15%, transform 6%, worker 1%)[22m
+
+[2m    Isolate [22m [33m7 workers spawned[39m[2m · ~1.08s startup each (spawn + environment, per file)[22m
+[2m            [22m [2mat least ~1.44s faster with [22m[33misolate: false[39m[2m — reuses workers across files instead of one per file[22m
+
+
+A 相：原配置 exit=0
+变异：临时副本 MAX_RETRIES 2 -> 1（只改临时副本）
+--- B 相：变异配置（MAX_RETRIES=1） ---
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.2 [39m[90m/tmp/mutation-3291-vHBOOm[39m
+
+ [31m❯[39m tests/gen-api.test.ts [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 75[2mms[22m[39m
+   [31m❯[39m gen:api 生成物 [2m(2)[22m
+[31m     [31m×[31m examples/openapi.json 是合法的 OpenAPI 3 文档，含 3 个操作[39m[32m 16[2mms[22m[39m
+     [32m✓[39m src/generated/api.ts 已生成，含 paths 与示例 schema 类型[32m 3[2mms[22m[39m
+ [32m✓[39m tests/handlers.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m tests/errors.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+ [31m❯[39m tests/http.test.ts [2m([22m[2m24 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1357[2mms[22m[39m
+   [32m✓[39m request() 基础：信封、鉴权头、追踪头 [2m(10)[22m
+     [32m✓[39m 成功：HTTP 200 + code 0 返回 data[32m 10[2mms[22m[39m
+     [32m✓[39m 自动附加 Authorization、X-Request-Id（UUID v4）、X-Site-Id[32m 4[2mms[22m[39m
+     [32m✓[39m 调用方传入的 X-Request-Id 会被库自动生成的覆盖（每次请求唯一追踪 ID 不可改写）[32m 2[2mms[22m[39m
+     [32m✓[39m 未登录时不附加 Authorization[32m 1[2mms[22m[39m
+     [32m✓[39m 未配置 siteId 时不发 X-Site-Id[32m 2[2mms[22m[39m
+     [32m✓[39m 业务错误：HTTP 200 + 非 0 业务码抛 ApiError，带 status、code、detail[32m 2[2mms[22m[39m
+     [32m✓[39m HTTP 错误：404 抛 ApiError，status 404，code 取错误体 code[32m 2[2mms[22m[39m
+     [32m✓[39m 非 JSON 响应体：HTTP 200 无信封时抛 ApiError（信封是约定，见 README）[32m 1[2mms[22m[39m
+     [32m✓[39m HTTP 200 配业务码 500 不重试（重试决策不看业务 code）[32m 1[2mms[22m[39m
+     [32m✓[39m isRetryable：网络错误与 502/503/504 可重试；500、超时、取消不可重试[32m 3[2mms[22m[39m
+   [31m❯[39m request() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n [2m(6)[22m
+[31m     [31m×[31m GET 网络错误重试 2 次后抛错；退避记录为 [300, 600]；共发 3 次[39m[32m 73[2mms[22m[39m
+[31m     [31m×[31m GET 503 两次后成功：第 3 次返回即返回 data[39m[32m 5[2mms[22m[39m
+     [33m[2m✓[22m[39m GET 502、504 各重试；HTTP 500 不重试[33m 612[2mms[22m[39m
+     [32m✓[39m POST 网络错误不重试；POST 503 不重试[32m 1[2mms[22m[39m
+     [32m✓[39m PUT、DELETE 网络错误不重试[32m 2[2mms[22m[39m
+     [33m[2m✓[22m[39m HTTP 503 配业务码 0 仍重试（业务码不参与重试决策）[33m 304[2mms[22m[39m
+   [32m✓[39m request() 401：刷新一次后重放，第二次仍 401 则清登录态并回首页 [2m(2)[22m
+     [32m✓[39m 401 后刷新一次、重放成功，返回 data[32m 4[2mms[22m[39m
+     [32m✓[39m 第二次仍 401：清登录态、回首页、抛错（只刷新一次）[32m 2[2mms[22m[39m
+   [32m✓[39m request() 超时与取消 [2m(6)[22m
+     [32m✓[39m 默认超时 15 秒（DEFAULT_TIMEOUT_MS = 15000）[32m 0[2mms[22m[39m
+     [32m✓[39m 超时抛 TimeoutError（用 50ms 短超时快速验证，不等 15 秒）[32m 62[2mms[22m[39m
+     [32m✓[39m 超时不重试（只发 1 次）[32m 32[2mms[22m[39m
+     [32m✓[39m cancelOnNavigate：路由切换时取消在途请求，抛 CANCELLED[32m 22[2mms[22m[39m
+     [32m✓[39m 未标记 cancelOnNavigate 的请求不受路由切换影响（仍在途）[32m 202[2mms[22m[39m
+     [32m✓[39m 请求结束即注销导航登记（成功后登记数为 0）[32m 1[2mms[22m[39m
+ [31m❯[39m tests/config.test.ts [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 85[2mms[22m[39m
+   [31m❯[39m 配置常量 [2m(4)[22m
+     [32m✓[39m 默认超时 15 秒[32m 10[2mms[22m[39m
+[31m     [31m×[31m 最多重试 2 次[39m[32m 59[2mms[22m[39m
+     [32m✓[39m 退避间隔 300ms × 2^n：[300, 600][32m 1[2mms[22m[39m
+     [32m✓[39m TanStack 默认 staleTime 30 秒[32m 0[2mms[22m[39m
+ [32m✓[39m tests/network.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [31m❯[39m tests/query.test.tsx [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 234[2mms[22m[39m
+   [31m❯[39m createApiQueryClient 默认配置 [2m(4)[22m
+     [32m✓[39m staleTime 30 秒[32m 4[2mms[22m[39m
+     [32m✓[39m 重试判定：网络错误与 502/503/504 可重试；500 与业务错误不可重试[32m 1[2mms[22m[39m
+     [32m✓[39m retryDelay：attempt 0 → 300ms，attempt 1 → 600ms[32m 1[2mms[22m[39m
+[31m     [31m×[31m retry：failureCount < 2 且可重试时才重试[39m[32m 12[2mms[22m[39m
+   [32m✓[39m useApiQuery / useApiMutation [2m(3)[22m
+     [32m✓[39m useApiQuery 成功：返回 data[32m 99[2mms[22m[39m
+     [32m✓[39m useApiQuery 失败：error 是 ApiError（500 不重试，直接失败）[32m 55[2mms[22m[39m
+     [32m✓[39m useApiMutation 成功：POST 带 JSON 体，返回 data[32m 59[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m48 passed[39m[22m[90m (53)[39m
+[2m   Start at [22m 05:12:56
+[2m   Duration [22m 4.17s[2m (environment 32%, tests 28%, transform 20%, import 18%, worker 2%)[22m
+
+[2m    Isolate [22m [33m7 workers spawned[39m[2m · ~984ms startup each (spawn + environment, per file)[22m
+[2m            [22m [2mat least ~1.31s faster with [22m[33misolate: false[39m[2m — reuses workers across files instead of one per file[22m
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m tests/config.test.ts[2m > [22m配置常量[2m > [22m最多重试 2 次
+[31m[1mAssertionError[22m: expected 1 to be 2 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m tests/config.test.ts:[2m16:25[22m[39m
+    [90m 14|[39m
+    [90m 15|[39m   [34mit[39m([32m'最多重试 2 次'[39m[33m,[39m () [33m=>[39m {
+    [90m 16|[39m     [34mexpect[39m([33mMAX_RETRIES[39m)[33m.[39m[34mtoBe[39m([34m2[39m)[33m;[39m
+    [90m   |[39m                         [31m^[39m
+    [90m 17|[39m   })[33m;[39m
+    [90m 18|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/gen-api.test.ts[2m > [22mgen:api 生成物[2m > [22mexamples/openapi.json 是合法的 OpenAPI 3 文档，含 3 个操作
+[31m[1mError[22m: ENOENT: no such file or directory, open '/tmp/mutation-3291-vHBOOm/examples/openapi.json'[39m
+[36m [2m❯[22m tests/gen-api.test.ts:[2m11:29[22m[39m
+    [90m  9|[39m [34mdescribe[39m([32m'gen:api 生成物'[39m[33m,[39m () [33m=>[39m {
+    [90m 10|[39m   [34mit[39m([32m'examples/openapi.json 是合法的 OpenAPI 3 文档，含 3 个操作'[39m[33m,[39m () [33m=>[39m {
+    [90m 11|[39m     const spec = JSON.parse(readFileSync(join(repoRoot, 'examples', 'o…
+    [90m   |[39m                             [31m^[39m
+    [90m 12|[39m     [34mexpect[39m(spec[33m.[39mopenapi[33m.[39m[34mstartsWith[39m([32m'3.'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m 13|[39m     [34mexpect[39m([33mObject[39m[33m.[39m[34mkeys[39m(spec[33m.[39mpaths))[33m.[39m[34mtoEqual[39m([
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/http.test.ts[2m > [22mrequest() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n[2m > [22mGET 网络错误重试 2 次后抛错；退避记录为 [300, 600]；共发 3 次
+[31m[1mAssertionError[22m: expected [ { …(5) }, { …(5) } ] to have a length of 3 but got 2[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 3[39m
+[31m+ 2[39m
+
+[36m [2m❯[22m tests/http.test.ts:[2m179:19[22m[39m
+    [90m177|[39m     [34mexpect[39m(err)[33m.[39m[34mtoBeInstanceOf[39m([33mApiError[39m)[33m;[39m
+    [90m178|[39m     [34mexpect[39m((err [35mas[39m [33mApiError[39m)[33m.[39mcode)[33m.[39m[34mtoBe[39m([32m'NETWORK'[39m)[33m;[39m
+    [90m179|[39m     [34mexpect[39m(calls)[33m.[39m[34mtoHaveLength[39m([34m3[39m)[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m180|[39m     [34mexpect[39m(delays)[33m.[39m[34mtoEqual[39m([[34m300[39m[33m,[39m [34m600[39m])[33m;[39m
+    [90m181|[39m     [34mexpect[39m([33mRETRY_DELAYS_MS[39m)[33m.[39m[34mtoEqual[39m([[34m300[39m[33m,[39m [34m600[39m])[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/http.test.ts[2m > [22mrequest() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n[2m > [22mGET 503 两次后成功：第 3 次返回即返回 data
+[31m[1mApiError[22m: 服务暂时不可用[39m
+[36m [2m❯[22m request src/services/http.ts:[2m211:13[22m[39m
+    [90m209|[39m         [35mthrow[39m [35mnew[39m [33mApiError[39m(code[33m,[39m message[33m,[39m requestId[33m,[39m status[33m,[39m detail)[33m;[39m
+    [90m210|[39m       }
+    [90m211|[39m       [35mthrow[39m [35mnew[39m [33mApiError[39m(code[33m,[39m message[33m,[39m requestId[33m,[39m status[33m,[39m detail)[33m;[39m
+    [90m   |[39m             [31m^[39m
+    [90m212|[39m     } [35mcatch[39m (err) {
+    [90m213|[39m       if (!(err instanceof ApiError) && !(err instanceof TimeoutError)…
+[90m [2m❯[22m tests/http.test.ts:[2m196:18[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/query.test.tsx[2m > [22mcreateApiQueryClient 默认配置[2m > [22mretry：failureCount < 2 且可重试时才重试
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m tests/query.test.tsx:[2m58:32[22m[39m
+    [90m 56|[39m     [35mif[39m ([35mtypeof[39m retry [33m===[39m [32m'function'[39m) {
+    [90m 57|[39m       [34mexpect[39m([34mretry[39m([34m0[39m[33m,[39m netErr))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m 58|[39m       [34mexpect[39m([34mretry[39m([34m1[39m[33m,[39m netErr))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   |[39m                                [31m^[39m
+    [90m 59|[39m       [34mexpect[39m([34mretry[39m([34m2[39m[33m,[39m netErr))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 60|[39m       [34mexpect[39m([34mretry[39m([34m0[39m[33m,[39m [35mnew[39m [33mApiError[39m([34m500[39m[33m,[39m [32m'x'[39m[33m,[39m [32m'r2'[39m[33m,[39m [34m500[39m)))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m
+
+
+B 相：变异配置（MAX_RETRIES=1） exit=1
+B 相已变红，符合预期。
+config.ts SHA256（变异后）: 4af5f1d03a6400c9b98b31d3a93038d1147663d9d8fc91fed0c016f6f1b501db
+--- C 相：恢复原配置 ---
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.2 [39m[90m/home/hatch/workspace/goals/20/hidden_files/skill-sync-20261125/3291-build/repo[39m
+
+ [32m✓[39m tests/config.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/gen-api.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/errors.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 1356[2mms[22m[39m
+   [32m✓[39m request() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n [2m(6)[22m
+     [33m[2m✓[22m[39m GET 502、504 各重试；HTTP 500 不重试[33m 607[2mms[22m[39m
+     [33m[2m✓[22m[39m HTTP 503 配业务码 0 仍重试（业务码不参与重试决策）[33m 303[2mms[22m[39m
+ [32m✓[39m tests/handlers.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+ [32m✓[39m tests/network.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/query.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 202[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m53 passed[39m[22m[90m (53)[39m
+[2m   Start at [22m 05:13:01
+[2m   Duration [22m 3.41s[2m (environment 45%, tests 36%, import 14%, transform 3%, worker 2%)[22m
+
+[2m    Isolate [22m [33m7 workers spawned[39m[2m · ~893ms startup each (spawn + environment, per file)[22m
+[2m            [22m [2mat least ~1.19s faster with [22m[33misolate: false[39m[2m — reuses workers across files instead of one per file[22m
+
+
+C 相：恢复原配置 exit=0
+MUTATION CHECK: PASS

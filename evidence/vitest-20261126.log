@@ -1,0 +1,22 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.2 [39m[90m/home/hatch/workspace/goals/20/hidden_files/skill-sync-20261125/3291-build/repo[39m
+
+ [32m✓[39m tests/handlers.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/errors.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/network.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 1289[2mms[22m[39m
+   [32m✓[39m request() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n [2m(6)[22m
+     [33m[2m✓[22m[39m GET 502、504 各重试；HTTP 500 不重试[33m 604[2mms[22m[39m
+     [33m[2m✓[22m[39m HTTP 503 配业务码 0 仍重试（业务码不参与重试决策）[33m 302[2mms[22m[39m
+ [32m✓[39m tests/gen-api.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/config.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/query.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 212[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m53 passed[39m[22m[90m (53)[39m
+[2m   Start at [22m 05:11:17
+[2m   Duration [22m 5.20s[2m (environment 50%, tests 22%, transform 13%, import 12%, worker 2%)[22m
+
+[2m    Isolate [22m [33m7 workers spawned[39m[2m · ~1.06s startup each (spawn + environment, per file)[22m
+[2m            [22m [2mat least ~1.42s faster with [22m[33misolate: false[39m[2m — reuses workers across files instead of one per file[22m
+

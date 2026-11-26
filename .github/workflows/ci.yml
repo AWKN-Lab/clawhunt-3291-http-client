@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install (pnpm, fallback npm ci)
+        run: |
+          if command -v pnpm >/dev/null 2>&1; then
+            corepack enable || true
+            pnpm install || npm ci
+          else
+            npm ci
+          fi
+      - name: Typecheck
+        run: npx tsc --noEmit -p tsconfig.json
+      - name: Vitest
+        run: npx vitest run
+      - name: gen:api check
+        run: node scripts/verify-gen-api.mjs
+      - name: MANIFEST check
+        run: sha256sum -c MANIFEST
