@@ -194,4 +194,5 @@
   head `f97d705d`，https://github.com/AWKN-Lab/clawhunt-3291-http-client/actions/runs/45760537639。
   （CI 通过后，本文件补记运行号，MANIFEST 同步更新，见第二次提交。）
 - 第二次运行：**run 45760676099，completed / success**，head `15106f7a`。
-- AC4 整改提交：推送后补 run 号与结果（待 CI 在新 HEAD 上跑完 success 后再补记，见后续提交）。
+- AC4 整改提交：**run 45777569008，completed / success**，head `a1265142`，
+  https://github.com/AWKN-Lab/clawhunt-3291-http-client/actions/runs/45777569008。
