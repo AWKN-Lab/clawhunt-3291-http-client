@@ -1,0 +1,36 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.2 [39m[90m/home/hatch/workspace/goals/20/hidden_files/skill-sync-20261125/3291-build/repo[39m
+
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 基础：信封、鉴权头、追踪头[2m > [22m成功：HTTP 200 + code 0 返回 data[32m 7[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 基础：信封、鉴权头、追踪头[2m > [22m自动附加 Authorization、X-Request-Id（UUID v4）、X-Site-Id[32m 2[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 基础：信封、鉴权头、追踪头[2m > [22m调用方传入的 X-Request-Id 会被库自动生成的覆盖（每次请求唯一追踪 ID 不可改写）[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 基础：信封、鉴权头、追踪头[2m > [22m未登录时不附加 Authorization[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 基础：信封、鉴权头、追踪头[2m > [22m未配置 siteId 时不发 X-Site-Id[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 基础：信封、鉴权头、追踪头[2m > [22m业务错误：HTTP 200 + 非 0 业务码抛 ApiError，带 status、code、detail[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 基础：信封、鉴权头、追踪头[2m > [22mHTTP 错误：404 抛 ApiError，status 404，code 取错误体 code[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 基础：信封、鉴权头、追踪头[2m > [22m非 JSON 响应体：HTTP 200 无信封时抛 ApiError（信封是约定，见 README）[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 基础：信封、鉴权头、追踪头[2m > [22mHTTP 200 配业务码 500 不重试（重试决策不看业务 code）[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 基础：信封、鉴权头、追踪头[2m > [22misRetryable：网络错误与 502/503/504 可重试；500、超时、取消不可重试[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n[2m > [22mGET 网络错误重试 2 次后抛错；退避记录为 [300, 600]；共发 3 次[32m 2[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n[2m > [22mGET 503 两次后成功：第 3 次返回即返回 data[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n[2m > [22mAC1：GET 连续三次 503 后抛错（请求 3 次、退避 [300, 600]）[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n[2m > [22mGET 502、504 各重试；HTTP 500 不重试[33m 605[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n[2m > [22mPOST 网络错误不重试；POST 503 不重试[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n[2m > [22mPUT、DELETE 网络错误不重试[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n[2m > [22mHTTP 503 配业务码 0 仍重试（业务码不参与重试决策）[33m 301[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 401：刷新一次后重放，第二次仍 401 则清登录态并回首页[2m > [22m401 后刷新一次、重放成功，返回 data[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 401：刷新一次后重放，第二次仍 401 则清登录态并回首页[2m > [22m第二次仍 401：清登录态、回首页、抛错（只刷新一次）[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 超时与取消[2m > [22m默认超时 15 秒（DEFAULT_TIMEOUT_MS = 15000）[32m 0[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 超时与取消[2m > [22m超时抛 TimeoutError（用 50ms 短超时快速验证，不等 15 秒）[32m 51[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 超时与取消[2m > [22mAC2：假定时器推进超过 15000ms 抛 TimeoutError（走真实默认超时 15000ms）[32m 5[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 超时与取消[2m > [22m超时不重试（只发 1 次）[32m 30[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 超时与取消[2m > [22mcancelOnNavigate：路由切换时取消在途请求，抛 CANCELLED[32m 22[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 超时与取消[2m > [22m未标记 cancelOnNavigate 的请求不受路由切换影响（仍在途）[32m 202[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mrequest() 超时与取消[2m > [22m请求结束即注销导航登记（成功后登记数为 0）[32m 1[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts[2m > [22mAC4：连续 100 个请求的 X-Request-Id 互不相同[2m > [22m连续发 100 个请求，100 个 X-Request-Id 全不相同且均为 UUID v4[32m 4[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m27 passed[39m[22m[90m (27)[39m
+[2m   Start at [22m 07:59:04
+[2m   Duration [22m 1.77s[2m (tests 94%, transform 3%, import 3%, worker 1%)[22m
+

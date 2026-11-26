@@ -5,9 +5,11 @@
 
 ## 运行结果总览
 
-- Vitest：`./node_modules/.bin/vitest run` → **7 个文件，54/54 通过，Duration 3.68s**，
-  退出码 0。原始日志：`evidence/vitest-20261126-ac4.log`（AC4 整改后重跑；上一轮日志
-  `evidence/vitest-20261126.log` 为 53/53，保留为历史）。
+- Vitest：`./node_modules/.bin/vitest run` → **7 个文件，56/56 通过，Duration 5.34s**，
+  退出码 0。原始日志：`evidence/vitest-20261126-ac1ac2.log`（AC1/AC2 整改后重跑；
+  上一轮日志 `evidence/vitest-20261126-ac4.log` 为 54/54，保留为历史）。
+  两条新测试逐项输出见 `evidence/vitest-20261126-ac1ac2-verbose.log`
+  （AC1 1ms、AC2 5ms，均为通过）。
 - typecheck：`./node_modules/.bin/tsc --noEmit -p tsconfig.json` → 无报错，退出码 0。
 - gen:api：`pnpm gen:api`（openapi-typescript 7.13.0）从 `examples/openapi.json`
   生成 `src/generated/api.ts`（3 个操作：listSpaces / getSpace / createLead）；
@@ -24,11 +26,15 @@
 - MANIFEST：`sha256sum -c MANIFEST` 全过（30 项；不含 MANIFEST 自身与
   evidence/*.log——MANIFEST 无法校验自己，日志每次运行都会再生）。
 - 一键自测：`./setup.sh` → **退出码 0**，安装、typecheck、Vitest、gen:api 校验、
-  MANIFEST 核验全部通过；本次运行（AC4 整改后）Vitest 54/54（7 个文件，Duration 3.74s）。
+  MANIFEST 核验全部通过；本次运行（AC1/AC2 整改后）Vitest 56/56（7 个文件）。
   原始日志：`evidence/selftest-setup-sh-20261126.log`。
-  **如实记录：**本次运行中 `pnpm install` 失败，setup.sh 按设计回退 `npm ci`（119 个包，7 秒）
+  如实记录：本次先跑 setup.sh 时 MANIFEST 尚未同步（tests/http.test.ts 新加两条测试），
+  MANIFEST 核验 1 项 FAILED、退出码 1；同步 MANIFEST 后重跑，全部通过。
+  失败那次的日志存为 `evidence/selftest-setup-sh-20261126-ac1ac2-fail-manifest.log`
+  （历史记录，未改写）。本次运行中 `pnpm install` 仍失败，setup.sh 按设计回退 `npm ci`
   后继续并全过；pnpm install 在本机时好时坏，回退路径是设计内行为，不是绕过。
-  上一轮自测日志存为 `evidence/selftest-setup-sh-20261126-r1.log`（历史记录，未改写）。
+  上一轮自测日志存为 `evidence/selftest-setup-sh-20261126-r2.log`（历史记录，未改写；
+  更早一轮存为 `evidence/selftest-setup-sh-20261126-r1.log`）。
   另有一份失败日志 `evidence/selftest-setup-sh-20261126-fail1.log`（历史记录）：
   首次运行因 setup.sh 用 `node` 直接执行 `.bin/tsc`（shell 包装脚本）报 SyntaxError，
   已修为真实 JS 入口（`node_modules/typescript/bin/tsc`、`node_modules/vitest/vitest.mjs`），
@@ -50,9 +56,15 @@
 ### 2. 默认超时 15 秒（AbortController），超时抛 TimeoutError
 
 - 测试：`tests/http.test.ts` > `request() 超时与取消` > 「默认超时 15 秒」、
-  「超时 50ms → 抛 TimeoutError 且不重试」；`tests/config.test.ts` > 「默认超时 15 秒」。
-- 输出：3 项全部通过。超时测试用 `createPendingFetchStub`（挂起桩）+ 短超时注入，
-  不真实等 15 秒；默认值由常量断言覆盖。
+  「超时 50ms → 抛 TimeoutError 且不重试」、
+  「AC2：假定时器推进超过 15000ms 抛 TimeoutError（走真实默认超时 15000ms）」；
+  `tests/config.test.ts` > 「默认超时 15 秒」。
+- 输出：4 项全部通过。AC2 测试用 Vitest 假定时器（`vi.useFakeTimers` +
+  `advanceTimersByTimeAsync(15001)`），走真实 `request()` 与真实默认超时 15000ms
+  （不传 timeout）；断言抛 TimeoutError 且 timeoutMs 为 15000、只发 1 次请求；
+  假定时器在 finally 中恢复。50ms 短超时测试保留为补充（未动）。
+  50ms 测试用 `createPendingFetchStub`（挂起桩）+ 短超时注入，不真实等 15 秒；
+  默认值由常量断言覆盖。
 - 文件：`src/services/http.ts`（AbortController + `__setDelayImpl` 测试注入点）、
   `src/config.ts`（DEFAULT_TIMEOUT_MS = 15000）、`src/errors.ts`（TimeoutError）。
 
@@ -67,12 +79,15 @@
 ### 4. 重试：仅 GET 的网络错误与 502、503、504，最多 2 次，退避 300ms × 2^n
 
 - 测试：`tests/http.test.ts` > `request() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n`
-  （6 项）：「GET 网络错误重试 2 次后抛错；退避记录为 [300, 600]；共发 3 次」、
-  「GET 503 两次后成功：第 3 次返回即返回 data」、「GET 502、504 各重试；HTTP 500 不重试」、
+  （7 项）：「GET 网络错误重试 2 次后抛错；退避记录为 [300, 600]；共发 3 次」、
+  「GET 503 两次后成功：第 3 次返回即返回 data」、
+  「AC1：GET 连续三次 503 后抛错（请求 3 次、退避 [300, 600]）」、
+  「GET 502、504 各重试；HTTP 500 不重试」、
   「POST、PUT、DELETE 不重试」、「HTTP 503 配业务码 0 仍重试（业务码不参与重试决策）」、
   「HTTP 200 配业务码 500 不重试」。
 - 测试：`tests/config.test.ts` > 「最多重试 2 次」「退避间隔 300ms × 2^n：[300, 600]」。
-- 输出：8 项全部通过；退避实测记录 `[300, 600]`。
+- 输出：9 项全部通过；AC1 测试断言请求 3 次、退避实测记录 `[300, 600]`、抛 ApiError
+  （status 503）。POST 503 只请求 1 次的测试保留未动（见第 5 点）。
 - 文件：`src/services/http.ts`（isRetryable + request 循环）、`src/config.ts`
   （MAX_RETRIES = 2、RETRY_DELAYS_MS = [300, 600]）。
 
@@ -176,6 +191,25 @@
 - 说明：上一轮样品只有“每次唯一”的单次断言，没有 100 次连续断言，是 FORGE 对照
   任务书原文自查发现的缺口；本次只加测试，未改任何实现逻辑。
 
+### 15. AC1/AC2 整改：按任务书原文补两条失败终态与假定时器测试（GPT 终审指出）
+
+- 背景：GPT 终审（2026-11-26 15:57，修改后 GO）指出 AC1、AC2 的测试方法与任务书原文
+  有差异，必须补两条测试，不能用相近测试替代。
+- AC1（任务书原文第 1 条）：“GET 返回 503 时共请求 3 次后抛错，POST 返回 503 时只请求 1 次”。
+  新增测试：`tests/http.test.ts` > 「AC1：GET 连续三次 503 后抛错（请求 3 次、退避 [300, 600]）」。
+  输出：通过（verbose 运行显示该项 1ms）。三个 503 响应队列走真实 `request()` 路径，
+  断言请求 3 次、退避 `[300, 600]`、抛 ApiError（status 503）。POST 503 只请求 1 次的
+  既有测试保留未动。
+- AC2（任务书原文第 2 条）：“请求超过 15 秒抛出 TimeoutError（测试断言，使用假定时器）”。
+  新增测试：`tests/http.test.ts` > 「AC2：假定时器推进超过 15000ms 抛 TimeoutError
+  （走真实默认超时 15000ms）」。输出：通过（verbose 运行显示该项 5ms）。
+  用 `vi.useFakeTimers` + `advanceTimersByTimeAsync(15001)`，走真实 `request()` 与真实
+  默认超时 15000ms（不传 timeout），断言抛 TimeoutError 且 timeoutMs 为 15000、只发 1 次请求；
+  假定时器在 finally 中恢复。50ms 短超时测试保留为补充（未动）。
+- 文件：`tests/http.test.ts`（新增两条测试）；`ACCEPTANCE-EVIDENCE.md`（本节与第 2、4 点更新）。
+- 说明：本次只加测试，未改任何实现逻辑（`src/` 一个文件没动）；变异自证未重做
+  （上一轮已 PASS，本次未动重试/超时/请求头逻辑，只加两条只读断言测试）。
+
 ## 未验证项（诚实说明）
 
 1. 401 刷新流程是桩（见第 7 点）：未接真实登录模块；刷新失败、token 失效边界只在桩层面验证。
@@ -196,3 +230,7 @@
 - 第二次运行：**run 45760676099，completed / success**，head `15106f7a`。
 - AC4 整改提交：**run 45777569008，completed / success**，head `a1265142`，
   https://github.com/AWKN-Lab/clawhunt-3291-http-client/actions/runs/45777569008。
+- AC4 补记提交：**run 45777705696，completed / success**，head `8b5cb04a`，
+  https://github.com/AWKN-Lab/clawhunt-3291-http-client/actions/runs/45777705696。
+  （本次 AC1/AC2 整改补记：上一轮该运行号只记录在回执里，未写进本文件。）
+- AC1/AC2 整改提交：待推送后补运行号与结果。

@@ -199,6 +199,24 @@ describe('request() 重试：仅 GET、网络错误与 502/503/504、最多 2 �
     expect(delays).toEqual([300, 600]);
   });
 
+  it('AC1：GET 连续三次 503 后抛错（请求 3 次、退避 [300, 600]）', async () => {
+    const delays: number[] = [];
+    __setDelayImpl(async (ms) => {
+      delays.push(ms);
+    });
+    const { calls, fn } = createFetchStub([
+      httpErrorBody(503, 503, '服务暂时不可用'),
+      httpErrorBody(503, 503, '服务暂时不可用'),
+      httpErrorBody(503, 503, '服务暂时不可用'),
+    ]);
+    vi.stubGlobal('fetch', fn);
+    const err = await request({ url: '/api/spaces' }).catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(ApiError);
+    expect((err as ApiError).status).toBe(503);
+    expect(calls).toHaveLength(3);
+    expect(delays).toEqual([300, 600]);
+  });
+
   it('GET 502、504 各重试；HTTP 500 不重试', async () => {
     const { calls, fn } = createFetchStub([
       httpErrorBody(502, 502, '网关异常'),
@@ -343,6 +361,31 @@ describe('request() 超时与取消', () => {
     expect(tErr.code).toBe('TIMEOUT');
     expect(tErr.timeoutMs).toBe(50);
     expect(tErr.requestId).toMatch(UUID_RE);
+  });
+
+  it('AC2：假定时器推进超过 15000ms 抛 TimeoutError（走真实默认超时 15000ms）', async () => {
+    vi.useFakeTimers();
+    try {
+      const { calls, fn } = createPendingFetchStub();
+      vi.stubGlobal('fetch', fn);
+      const pending = request({ url: '/api/spaces' }); // 不传 timeout，走默认 15000ms
+      const assertion = pending.then(
+        () => {
+          throw new Error('AC2 假定时器测试：请求不应成功');
+        },
+        (e: unknown) => e,
+      );
+      await vi.advanceTimersByTimeAsync(15001);
+      const err = await assertion;
+      expect(err).toBeInstanceOf(TimeoutError);
+      const tErr = err as TimeoutError;
+      expect(tErr.code).toBe('TIMEOUT');
+      expect(tErr.timeoutMs).toBe(15000);
+      expect(tErr.requestId).toMatch(UUID_RE);
+      expect(calls).toHaveLength(1);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('超时不重试（只发 1 次）', async () => {

@@ -1,7 +1,7 @@
 NODE=node (v24.22.1)
 安装：pnpm 不可用或失败，回退 npm ci
 
-added 119 packages in 7s
+added 119 packages in 8s
 
 30 packages are looking for funding
   run `npm fund` for details
@@ -11,28 +11,28 @@ typecheck OK
 
 [1m[30m[46m RUN [49m[39m[22m [36mv5.1.2 [39m[90m/home/hatch/workspace/goals/20/hidden_files/skill-sync-20261125/3291-build/repo[39m
 
- [32m✓[39m tests/handlers.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/handlers.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 28[2mms[22m[39m
  [32m✓[39m tests/errors.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 17[2mms[22m[39m
- [32m✓[39m tests/network.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
- [32m✓[39m tests/http.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 1315[2mms[22m[39m
-   [32m✓[39m request() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n [2m(6)[22m
-     [33m[2m✓[22m[39m GET 502、504 各重试；HTTP 500 不重试[33m 607[2mms[22m[39m
-     [33m[2m✓[22m[39m HTTP 503 配业务码 0 仍重试（业务码不参与重试决策）[33m 302[2mms[22m[39m
- [32m✓[39m tests/gen-api.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m tests/config.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
- [32m✓[39m tests/query.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 212[2mms[22m[39m
+ [32m✓[39m tests/http.test.ts [2m([22m[2m27 tests[22m[2m)[22m[33m 1409[2mms[22m[39m
+   [32m✓[39m request() 重试：仅 GET、网络错误与 502/503/504、最多 2 次、退避 300ms×2^n [2m(7)[22m
+     [33m[2m✓[22m[39m GET 502、504 各重试；HTTP 500 不重试[33m 663[2mms[22m[39m
+     [33m[2m✓[22m[39m HTTP 503 配业务码 0 仍重试（业务码不参与重试决策）[33m 304[2mms[22m[39m
+ [32m✓[39m tests/network.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/config.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/gen-api.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/query.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 277[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
-[2m      Tests [22m [1m[32m54 passed[39m[22m[90m (54)[39m
-[2m   Start at [22m 07:43:44
-[2m   Duration [22m 3.74s[2m (environment 33%, tests 27%, import 21%, transform 17%, worker 2%)[22m
+[2m      Tests [22m [1m[32m56 passed[39m[22m[90m (56)[39m
+[2m   Start at [22m 08:00:18
+[2m   Duration [22m 5.43s[2m (environment 42%, tests 23%, transform 21%, import 13%, worker 1%)[22m
 
-[2m    Isolate [22m [33m7 workers spawned[39m[2m · ~879ms startup each (spawn + environment, per file)[22m
-[2m            [22m [2mat least ~1.17s faster with [22m[33misolate: false[39m[2m — reuses workers across files instead of one per file[22m
+[2m    Isolate [22m [33m7 workers spawned[39m[2m · ~1.22s startup each (spawn + environment, per file)[22m
+[2m            [22m [2mat least ~1.63s faster with [22m[33misolate: false[39m[2m — reuses workers across files instead of one per file[22m
 
 vitest OK
 ✨ openapi-typescript 7.13.0
-🚀 /home/hatch/workspace/goals/20/hidden_files/skill-sync-20261125/3291-build/repo/examples/openapi.json → /tmp/gen-api-check-mzzy1T/api.ts [58.3ms]
+🚀 /home/hatch/workspace/goals/20/hidden_files/skill-sync-20261125/3291-build/repo/examples/openapi.json → /tmp/gen-api-check-IqvbD2/api.ts [115.1ms]
 gen:api check OK：重新生成的类型与 src/generated/api.ts 一致。
 gen:api check OK
 .github/workflows/ci.yml: OK
