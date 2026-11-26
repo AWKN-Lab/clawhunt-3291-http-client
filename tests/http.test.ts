@@ -383,3 +383,36 @@ describe('request() 超时与取消', () => {
     expect(__pendingNavigableCount()).toBe(0);
   });
 });
+
+describe('AC4：连续 100 个请求的 X-Request-Id 互不相同', () => {
+  beforeEach(() => {
+    setRuntimeConfig({ apiBase: 'https://api.example.invalid' });
+    setToken('token-demo');
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    __resetRuntimeConfig();
+    setToken(null);
+    __resetDelayImpl();
+    __resetGlobalHandlers();
+    __resetRefreshHandler();
+    __resetGoHomeHandler();
+  });
+
+  it('连续发 100 个请求，100 个 X-Request-Id 全不相同且均为 UUID v4', async () => {
+    const { calls, fn } = createFetchStub(
+      Array.from({ length: 100 }, () => okBody({ id: 's1' })),
+    );
+    vi.stubGlobal('fetch', fn);
+    for (let i = 0; i < 100; i++) {
+      await request({ url: '/api/spaces' });
+    }
+    expect(calls).toHaveLength(100);
+    const ids = calls.map((c) => c.headers['X-Request-Id']);
+    expect(new Set(ids).size).toBe(100);
+    for (const id of ids) {
+      expect(id).toMatch(UUID_RE);
+    }
+  });
+});

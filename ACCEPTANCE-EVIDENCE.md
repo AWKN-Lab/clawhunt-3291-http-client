@@ -5,8 +5,9 @@
 
 ## 运行结果总览
 
-- Vitest：`./node_modules/.bin/vitest run` → **7 个文件，53/53 通过，Duration 5.20s**，
-  退出码 0。原始日志：`evidence/vitest-20261126.log`。
+- Vitest：`./node_modules/.bin/vitest run` → **7 个文件，54/54 通过，Duration 3.68s**，
+  退出码 0。原始日志：`evidence/vitest-20261126-ac4.log`（AC4 整改后重跑；上一轮日志
+  `evidence/vitest-20261126.log` 为 53/53，保留为历史）。
 - typecheck：`./node_modules/.bin/tsc --noEmit -p tsconfig.json` → 无报错，退出码 0。
 - gen:api：`pnpm gen:api`（openapi-typescript 7.13.0）从 `examples/openapi.json`
   生成 `src/generated/api.ts`（3 个操作：listSpaces / getSpace / createLead）；
@@ -23,11 +24,11 @@
 - MANIFEST：`sha256sum -c MANIFEST` 全过（30 项；不含 MANIFEST 自身与
   evidence/*.log——MANIFEST 无法校验自己，日志每次运行都会再生）。
 - 一键自测：`./setup.sh` → **退出码 0**，安装、typecheck、Vitest、gen:api 校验、
-  MANIFEST 核验全部通过；本次运行 Vitest 53/53（7 个文件，Duration 4.31s）。
+  MANIFEST 核验全部通过；本次运行（AC4 整改后）Vitest 54/54（7 个文件，Duration 3.74s）。
   原始日志：`evidence/selftest-setup-sh-20261126.log`。
-  **如实记录：**本次运行中 `pnpm install` 报 EPERM（chown node_modules/.modules.yaml
-  被拒），setup.sh 按设计回退 `npm ci`（119 个包，8 秒）后继续并全过；pnpm install 在本机
-  时好时坏（前一次运行曾成功），回退路径是设计内行为，不是绕过。
+  **如实记录：**本次运行中 `pnpm install` 失败，setup.sh 按设计回退 `npm ci`（119 个包，7 秒）
+  后继续并全过；pnpm install 在本机时好时坏，回退路径是设计内行为，不是绕过。
+  上一轮自测日志存为 `evidence/selftest-setup-sh-20261126-r1.log`（历史记录，未改写）。
   另有一份失败日志 `evidence/selftest-setup-sh-20261126-fail1.log`（历史记录）：
   首次运行因 setup.sh 用 `node` 直接执行 `.bin/tsc`（shell 包装脚本）报 SyntaxError，
   已修为真实 JS 入口（`node_modules/typescript/bin/tsc`、`node_modules/vitest/vitest.mjs`），
@@ -161,6 +162,20 @@
 - 文件：`scripts/gen-api.*`（见 package.json scripts：gen:api / gen:api:check）、
   `examples/openapi.json`（虚构空间/线索接口）、`src/generated/api.ts`。
 
+### 14. AC4：连续 100 个请求的 X-Request-Id 互不相同（任务书原文）
+
+- 任务书原文（`task-3291-cli-show-20261126.json`，acceptance_criteria 第 4 条）：
+  「连续 100 个请求的 X-Request-Id 互不相同（测试断言）」。
+- 测试：`tests/http.test.ts` > `AC4：连续 100 个请求的 X-Request-Id 互不相同` >
+  「连续发 100 个请求，100 个 X-Request-Id 全不相同且均为 UUID v4」。
+- 输出：通过（verbose 运行显示该项 4ms）。测试走真实的 `request()` 调用路径，
+  用现有 fetch 桩（`createFetchStub`，100 个 `okBody` 响应队列），不真实联网；
+  收集 100 次请求头里的 X-Request-Id，断言 `new Set(ids).size === 100` 且每个值
+  均匹配 UUID v4 正则。
+- 文件：`tests/http.test.ts`（新增 describe 块，AC4 整改提交）。
+- 说明：上一轮样品只有“每次唯一”的单次断言，没有 100 次连续断言，是 FORGE 对照
+  任务书原文自查发现的缺口；本次只加测试，未改任何实现逻辑。
+
 ## 未验证项（诚实说明）
 
 1. 401 刷新流程是桩（见第 7 点）：未接真实登录模块；刷新失败、token 失效边界只在桩层面验证。
@@ -178,3 +193,5 @@
 - 首次运行：**run 45760537639，job `check`，completed / success**，
   head `f97d705d`，https://github.com/AWKN-Lab/clawhunt-3291-http-client/actions/runs/45760537639。
   （CI 通过后，本文件补记运行号，MANIFEST 同步更新，见第二次提交。）
+- 第二次运行：**run 45760676099，completed / success**，head `15106f7a`。
+- AC4 整改提交：推送后补 run 号与结果（待 CI 在新 HEAD 上跑完 success 后再补记，见后续提交）。
