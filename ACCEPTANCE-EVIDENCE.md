@@ -175,4 +175,6 @@
 
 - 工作流：`.github/workflows/ci.yml`（Node 24：安装 → typecheck → Vitest → gen:api 校验 →
   MANIFEST 核验）。
-- 首次运行：待推送后填写运行号与结果。
+- 首次运行：**run 45760537639，job `check`，completed / success**，
+  head `f97d705d`，https://github.com/AWKN-Lab/clawhunt-3291-http-client/actions/runs/45760537639。
+  （CI 通过后，本文件补记运行号，MANIFEST 同步更新，见第二次提交。）
